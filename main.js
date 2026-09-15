@@ -37,7 +37,9 @@
 			global.level.x = 0;
 			global.level.y = (self.innerHeight - global.level.height) / 2;
 		}
-		global.level.aura = global.level.auraBase * global.level.width * global.level.height / 20000;
+
+		// Scale by a linear screen dimension, not width*height (area)
+		global.level.aura = global.level.auraBase * Math.min(self.innerWidth,self.innerHeight) / 14;
 
 		global.level.waldoX = global.level.x + global.level.waldoXPx / global.level.image.width * global.level.width;
 		global.level.waldoY = global.level.y + global.level.waldoYPx / global.level.image.height * global.level.height;
