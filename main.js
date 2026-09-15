@@ -26,7 +26,7 @@
 	}
 
 	function scale() {
-		if(global.level.image.width / self.innerWidth < global.level.image.height / self.innerHeight) {
+		if(global.level.image.width / self.innerWidth > global.level.image.height / self.innerHeight) {
 			global.level.height = self.innerHeight;
 			global.level.width = global.level.image.width / global.level.image.height * global.level.height;
 			global.level.x = (self.innerWidth - global.level.width) / 2;
