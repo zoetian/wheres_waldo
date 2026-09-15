@@ -109,6 +109,15 @@
 		window.addEventListener("mousemove",redraw);
 		window.addEventListener("dblclick",clickHandler);
 	}
+	var pageLoadTime = Date.now();
+	var instructionDelay = 2000;
+	function beginAfterInstructionDelay() {
+		var remaining = instructionDelay - (Date.now() - pageLoadTime);
+		if(remaining > 0)
+			setTimeout(begin,remaining);
+		else
+			begin();
+	}
 	(function() {
 		var aura_modifier = 2;
 		global.levels =
@@ -135,7 +144,7 @@
 			document.body.appendChild(global.main);
 			global.drawable = global.main.getContext("2d");
 
-			global.level.callback = begin;
+			global.level.callback = beginAfterInstructionDelay;
 			if(global.level.ready)
 				global.level.callback();
 		}
