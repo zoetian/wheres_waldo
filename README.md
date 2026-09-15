@@ -25,11 +25,8 @@ There are only four levels, if memory serves.
 
 [ Improvement ] // Todo that never happens Orz
 
-- seems like a good place to put the never-will-happen-TODOs
 - opening scene and player guides
 - transition animations among levels
 - ending hints
 - timer and scores counter
 - more background music
-- .....
-- more time and love

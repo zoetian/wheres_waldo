@@ -17,7 +17,8 @@
 			this.height = this.image.height;
 			this.x = 0;
 			this.y = 0;
-			this.aura = aura || 1;
+			this.auraBase = aura || 1; // fixed base so scale() can recompute aura fresh each resize instead of compounding it
+			this.aura = this.auraBase;
 			this.waldoRPx = waldoR;
 			this.waldoXPx = waldoX;
 			this.waldoYPx = waldoY;
@@ -36,7 +37,7 @@
 			global.level.x = 0;
 			global.level.y = (self.innerHeight - global.level.height) / 2;
 		}
-		global.level.aura *= global.level.width * global.level.height / 20000;
+		global.level.aura = global.level.auraBase * global.level.width * global.level.height / 20000;
 
 		global.level.waldoX = global.level.x + global.level.waldoXPx / global.level.image.width * global.level.width;
 		global.level.waldoY = global.level.y + global.level.waldoYPx / global.level.image.height * global.level.height;
