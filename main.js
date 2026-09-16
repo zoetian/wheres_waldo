@@ -113,13 +113,43 @@
 		window.addEventListener("dblclick",clickHandler);
 	}
 	var pageLoadTime = Date.now();
-	var instructionDelay = 2000;
+	var instructionDelay = 3000;
 	function beginAfterInstructionDelay() {
 		var remaining = instructionDelay - (Date.now() - pageLoadTime);
 		if(remaining > 0)
-			setTimeout(begin,remaining);
+			startCountdown();
 		else
 			begin();
+	}
+	var fadeHoldDuration = 1000; // stay light blue for the first second before darkening
+	function startCountdown() {
+		var countdownEl = document.getElementById("countdown");
+		function startFade() {
+			var msLeft = instructionDelay - (Date.now() - pageLoadTime);
+			if(msLeft <= 0)
+				return;
+			document.body.style.transition = "background-color " + (msLeft / 1000) + "s linear";
+			document.body.style.backgroundColor = "#000";
+		}
+		var holdRemaining = fadeHoldDuration - (Date.now() - pageLoadTime);
+		if(holdRemaining > 0)
+			setTimeout(startFade,holdRemaining);
+		else
+			startFade();
+		function tick() {
+			var msLeft = instructionDelay - (Date.now() - pageLoadTime);
+			var secondsLeft = Math.ceil(msLeft / 1000);
+			if(secondsLeft <= 0) {
+				if(countdownEl)
+					countdownEl.textContent = "";
+				begin();
+				return;
+			}
+			if(countdownEl)
+				countdownEl.textContent = secondsLeft;
+			setTimeout(tick,msLeft - (secondsLeft - 1) * 1000);
+		}
+		tick();
 	}
 	(function() {
 		var aura_modifier = 2;
