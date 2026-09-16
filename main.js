@@ -106,11 +106,41 @@
 		global.mouseY = e.clientY;
 	}
 
+	function touchMoveHandler(e) {
+		e.preventDefault();
+		if(e.touches.length > 0)
+			redraw(e.touches[0]);
+	}
+	var lastTapTime = 0;
+	var lastTapX = 0;
+	var lastTapY = 0;
+	var doubleTapDelay = 300; // ms
+	var doubleTapDistance = 30; // px
+	function touchEndHandler(e) {
+		e.preventDefault();
+		var touch = e.changedTouches[0];
+		if(!touch)
+			return;
+		var now = Date.now();
+		var dx = touch.clientX - lastTapX;
+		var dy = touch.clientY - lastTapY;
+		if(now - lastTapTime < doubleTapDelay && Math.sqrt(dx*dx + dy*dy) < doubleTapDistance) {
+			lastTapTime = 0;
+			clickHandler(touch);
+		} else {
+			lastTapTime = now;
+			lastTapX = touch.clientX;
+			lastTapY = touch.clientY;
+		}
+	}
 	function begin() {
 		scale();
 		window.addEventListener("resize",scale);
 		window.addEventListener("mousemove",redraw);
 		window.addEventListener("dblclick",clickHandler);
+		window.addEventListener("touchstart",touchMoveHandler,{passive:false});
+		window.addEventListener("touchmove",touchMoveHandler,{passive:false});
+		window.addEventListener("touchend",touchEndHandler,{passive:false});
 	}
 	var pageLoadTime = Date.now();
 	var instructionDelay = 3000;
@@ -171,6 +201,7 @@
 		global.main.style.left = 0;
 		global.main.style.position = "fixed";
 		global.main.style.cursor = "crosshair";
+		global.main.style.touchAction = "none";
 
 		window.addEventListener("load",
 		function() {
@@ -195,6 +226,9 @@
 			window.removeEventListener("resize",scale);
 			window.removeEventListener("mousemove",redraw);
 			window.removeEventListener("dblclick",clickHandler);
+			window.removeEventListener("touchstart",touchMoveHandler);
+			window.removeEventListener("touchmove",touchMoveHandler);
+			window.removeEventListener("touchend",touchEndHandler);
 
 			global.drawable.fillStyle = "#FFEC8B";
 			global.drawable.fillRect(0,0,self.innerWidth,self.innerHeight);
